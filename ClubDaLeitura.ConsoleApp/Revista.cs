@@ -12,13 +12,15 @@ namespace ClubDaLeitura.ConsoleApp
         public string nomeRevista;
         public int ano;
         public string caixaDaRevista;
-         
+        public string categoriaDaRevista;
+
         public string[] arrayNomeRevista = new string[1000];
         public string[] arrayColecao = new string[1000];
         public int[] arrayAno = new int[1000];
         public string[] arrayCaixaDaRevista = new string[1000];
          
         public int contadorRevistas = 0;
+        public int contadorRevistasCategoria = 0;
 
         public  int CadastrarRevista(int contadorCaixas, bool[] arrayEstaEmprestado, int opcaoMenu)
         {
@@ -36,9 +38,24 @@ namespace ClubDaLeitura.ConsoleApp
             notificador.ApresentarMensagem("Informe a caixa onde está guardada a Revista " + (contadorRevistas + 1) + ":", ConsoleColor.Yellow);
             caixaDaRevista = Console.ReadLine();
 
-            //aqui viria um METODO CADASTRAR CAIXA
+            notificador.ApresentarMensagem("Escreva o nome da categoria na qual se enquadrará a Revista " + (contadorRevistas + 1) + ":", ConsoleColor.Yellow);
+            categoriaDaRevista = Console.ReadLine();
 
-            arrayNomeRevista[contadorRevistas] = nomeRevista;
+            //Varrer qual quer devolver
+            //for (contadorRevistasCategoria = 0; contadorRevistasCategoria < 1000; contadorRevistasCategoria++)
+            //{
+            //    if (nomeRevistaDevolucao == revistas.arrayNomeRevista[contadorDevol] && emprestimos.arrayEstaEmprestado[contadorDevol] == false)
+            //    {
+            //        Console.WriteLine($"A revista {revistas.arrayColecao[contadorDevol]} não está emprestada para ninguém no momento...");
+            //        opcaoMenu2 = 0;
+            //        break;
+            //    }
+
+            //}
+
+                //aqui viria um METODO CADASTRAR CAIXA
+
+                arrayNomeRevista[contadorRevistas] = nomeRevista;
             arrayColecao[contadorRevistas] = colecao;
             arrayAno[contadorRevistas] = ano;
             arrayCaixaDaRevista[contadorRevistas] = caixaDaRevista;

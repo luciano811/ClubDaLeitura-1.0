@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClubDaLeitura2.ConsoleApp;
+using System;
 
 namespace ClubDaLeitura.ConsoleApp
 {
@@ -6,7 +7,10 @@ namespace ClubDaLeitura.ConsoleApp
     {
         //um notificador estatico para o ObterDataDevolucaoRevista()
         public static Notificador notificador = new Notificador();
-        public static int indiceEmprestimoMenu = 0;
+        static int indiceEmprestimoMenu = 0;
+          
+          
+          
 
         static void Main(string[] args)
         {
@@ -16,8 +20,10 @@ namespace ClubDaLeitura.ConsoleApp
             Revista revistas = new Revista();
             Caixa caixas = new Caixa();
             Emprestimo emprestimos = new Emprestimo();
-            Notificador notificador = new Notificador();            
-                                            
+            Notificador notificador = new Notificador(); 
+            Categoria categorias = new Categoria();
+            Reserva reservas = new Reserva();
+            Multa multas = new Multa();
 
             //Declaração Devolucao
             string[] arrayNomeRevistaDevolvida = new string[1000];
@@ -27,206 +33,336 @@ namespace ClubDaLeitura.ConsoleApp
 
             #endregion
 
-            notificador.ApresentarMensagem("Bem Vindo ao Clube do Livro!!!", ConsoleColor.DarkGreen);
-            int opcaoMenu;            
+            int opcaoMenuAmplo;
+            int opcaoMenu1 = 0;
+            int opcaoMenu2 = 0;
+            int opcaoMenu3 = 0;
+
+
+
 
             //MENU
             do
             {
-                notificador.ApresentarMensagem("\n1) Cadastrar Caixa\n2) Cadastrar Revista\n3) Cadastrar Amigo\n", ConsoleColor.White);
-                notificador.ApresentarMensagem("4) Empréstimo\n5) Devolução", ConsoleColor.Yellow);
-                notificador.ApresentarMensagem("\n6) Visualizar Caixas\n7) Visualizar todas as Revistas\n8) Visualizar Emprestados\n", ConsoleColor.DarkYellow);
-                notificador.ApresentarMensagem("9) Sair", ConsoleColor.Red);                
+                notificador.ApresentarMensagem("MENU INICIAL DO CLUBE DO LIVRO!!!", ConsoleColor.Cyan);
 
-                opcaoMenu = Convert.ToInt32(Console.ReadLine());
+                notificador.ApresentarMensagem("\n1) Controle de Cadastros\n2) Controle de Reservas/Emprestimos\n3) Visualizações\n", ConsoleColor.White);                
+                notificador.ApresentarMensagem("4) Sair", ConsoleColor.Red);                 
 
-                //CADASTRAR CAIXA
-                if (opcaoMenu == 1)
+                opcaoMenuAmplo = Convert.ToInt32(Console.ReadLine());
+                Console.Clear();
+
+                //CADASTROSSSSSSSSSSSSSSSSSSS
+                while (opcaoMenuAmplo == 1) 
                 {
-                    //ver se tiro esse igual
-                    caixas.contadorCaixas = caixas.CadastrarCaixa();
-                    notificador.ApresentarMensagem("Caixa cadastrada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
-                    Console.ReadKey();
-                    Console.Clear();
-                }
+                    notificador.ApresentarMensagem("CONTROLE DE CADASTROS", ConsoleColor.Cyan);
+                    notificador.ApresentarMensagem("\n1) Cadastrar Caixa\n2) Cadastrar Categoria\n3) Cadastrar Revista\n4) Cadastrar Amigo\n5) Sair", ConsoleColor.White);
+                    opcaoMenu1 = Convert.ToInt32(Console.ReadLine());
 
-                //CADASTRAR REVISTA
-                while (opcaoMenu == 2)
-                {
-                    if (caixas.contadorCaixas == 0)
+                    //CADASTRAR CAIXA
+                    if (opcaoMenu1 == 1)
                     {
-                        notificador.ApresentarMensagem("Não existem caixas para guardar essa revista, aperte qualquer tecla para prosseguir", ConsoleColor.Red);
-                        Console.ReadKey();
-                        Console.Clear();
-                        break;
-                    }
-
-                    //ver se tiro esse igual
-                    revistas.contadorRevistas = revistas.CadastrarRevista(caixas.contadorCaixas, emprestimos.arrayEstaEmprestado, opcaoMenu);
-                    notificador.ApresentarMensagem("Revista cadastrada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
-                    Console.ReadKey();
-                    Console.Clear();
-                    opcaoMenu = 0;
-                }                
-
-                //CADASTRAR AMIGO
-                if (opcaoMenu == 3)
-                {
-                    amigos.CadastrarAmigo();
-                    notificador.ApresentarMensagem("Amigo cadastrado com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-
-                // EMPRESTIMO
-                if (opcaoMenu == 4)
-                {
-                    #region Verificação
-                    if (revistas.arrayNomeRevista[0] == null)
-                    {
-                        notificador.ApresentarMensagem("\nSem revista cadastrada...", ConsoleColor.Red);
+                        //ver se tiro esse igual
+                        caixas.contadorCaixas = caixas.CadastrarCaixa();
+                        notificador.ApresentarMensagem("Caixa cadastrada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
                         Console.ReadKey();
                         Console.Clear();
                     }
-                    else if (amigos.arrayNomeCria[0] == null)
-                    {
-                        notificador.ApresentarMensagem("\nSem criança cadastrada...", ConsoleColor.Red);
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
-                    #endregion                    
 
-                    if (revistas.arrayNomeRevista[0] != null && amigos.arrayNomeCria[0] != null)
-                    {
-                        
-                        
-                        notificador.ApresentarMensagem("\nDigite o nome da revista que você pretende emprestar", ConsoleColor.Yellow);
-                        emprestimos.arrayNomeRevistaEmprestada[indiceEmprestimoMenu] = Console.ReadLine();
-                                               
-                        notificador.ApresentarMensagem("\nDigite o nome da criança para a qual você pretende emprestar", ConsoleColor.Yellow);
-                        emprestimos.arrayNomeCriaEmprestimo[indiceEmprestimoMenu] = Console.ReadLine();
-
-                        emprestimos.VarrerParaEmprestar(ref opcaoMenu, revistas.arrayNomeRevista, ref indiceEmprestimoMenu);
-                        notificador.ApresentarMensagem("Emprestimo realizado com sucesso\nAperte uma tecla para continuar", ConsoleColor.Green);
-                        indiceEmprestimoMenu++;
-                        emprestimos.indiceDatas++;
-                        Console.ReadKey();
-                        Console.Clear();
-                    }
-                }
                     
 
-                    
-                
+                    //CADASTRAR CATEGORIA
+                    if (opcaoMenu1 == 2)
+                    {                      
+                        categorias.contadorCategorias = categorias.CadastrarCategoria();
+                        notificador.ApresentarMensagem("Categoria cadastrada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
 
-                // DEVOLUÇÃO
-                if (opcaoMenu == 5)
-                {
-                    Console.WriteLine("\nDigite o nome da revista que você pretende devolver");
-                    string nomeRevistaDevolucao = Console.ReadLine();
-
-                    //Varrer qual quer devolver
-                    for (contadorDevol = 0; contadorDevol < 1000; contadorDevol++)
+                    //CADASTRAR REVISTA
+                    while (opcaoMenu1 == 3)
                     {
-                        
-                        if (nomeRevistaDevolucao == revistas.arrayNomeRevista[contadorDevol] && emprestimos.arrayEstaEmprestado[contadorDevol] == false)
+                        if (caixas.contadorCaixas == 0)
                         {
-                            Console.WriteLine($"A revista {revistas.arrayColecao[contadorDevol]} não está emprestada para ninguém no momento...");
-                            opcaoMenu = 0;
-                            break;
-                        }
-
-                        if (nomeRevistaDevolucao == revistas.arrayNomeRevista[contadorDevol] && emprestimos.arrayEstaEmprestado[contadorDevol] == true)
-                        {
-                            //marcar a data do emprestimo
-                            DateTime dataDevolucao = ObterDataDevolucaoRevista();
-
-                            emprestimos.arrayEstaEmprestado[contadorDevol] = false;
-
-                            Console.WriteLine($"A revista {revistas.arrayNomeRevista[contadorDevol]} agora está devolvida. Data: aaaaaaaa");
-                            emprestimos.arrayNomeRevistaEmprestada[contadorDevol] = null;
-                            arrayEstaDevolvido[emprestimos.emprestados] = true;
-                            emprestimos.emprestados--;
-                            opcaoMenu = 0;
-                            notificador.ApresentarMensagem($"Devolução da revista: '{revistas.arrayNomeRevista[contadorDevol]}' realizada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
+                            notificador.ApresentarMensagem("Não existem caixas para guardar essa revista, aperte qualquer tecla para prosseguir", ConsoleColor.Red);
                             Console.ReadKey();
                             Console.Clear();
                             break;
                         }
-                        
+
+                        else if (categorias.contadorCategorias == 0)
+                        {
+                            notificador.ApresentarMensagem("Não existem categorias para essa revista, aperte qualquer tecla para prosseguir", ConsoleColor.Red);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+
+                        revistas.contadorRevistas = revistas.CadastrarRevista(caixas.contadorCaixas, emprestimos.arrayEstaEmprestado, opcaoMenu1);
+                        notificador.ApresentarMensagem("Revista cadastrada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();
+                        opcaoMenu1 = 0;
                     }
-                    
-                }
 
-                //VISUALIZAR Caixas
-                if (opcaoMenu == 6)
+                    //CADASTRAR AMIGO
+                    if (opcaoMenu1 == 4)
+                    {
+                        amigos.CadastrarAmigo();
+                        notificador.ApresentarMensagem("Amigo cadastrado com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+
+                    if (opcaoMenu1 == 5)
+                    {
+                        Console.Clear();
+                        break;
+                    }
+                } 
+
+                //RESERVASSSSS E EMPRESTIMOSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                while (opcaoMenuAmplo == 2) 
                 {
-                    Console.WriteLine($"\n\nNúmero de Caixas: {caixas.contadorCaixas}");
-                    
-                    caixas.MostrarCaixas();
-                    
-                    notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
-                    Console.ReadKey();
-                    Console.Clear();
+                    notificador.ApresentarMensagem("CONTROLE DE RESERVAS E EMPRESTIMOS", ConsoleColor.Cyan);
+                    notificador.ApresentarMensagem("\n1) Reserva\n2) Empréstimo\n3) Devolução\n4) Multas\n5) Quitar Multa\n6) Sair", ConsoleColor.White);
+                    opcaoMenu2 = Convert.ToInt32(Console.ReadLine());
+
+                    // RESERVAS
+                    if (opcaoMenu2 == 1)
+                    {
+                        while (opcaoMenu2 == 1)
+                        {
+                            if (revistas.contadorRevistas == 0)
+                            {
+                                notificador.ApresentarMensagem("Não existem revistas para essa reserva, aperte qualquer tecla para prosseguir", ConsoleColor.Red);
+                                Console.ReadKey();
+                                Console.Clear();
+                                break;
+                            }
+
+                            else if (amigos.contadorAmigos == 0)
+                            {
+                                notificador.ApresentarMensagem("Não existem amigos para essa reserva, aperte qualquer tecla para prosseguir", ConsoleColor.Red);
+                                Console.ReadKey();
+                                Console.Clear();
+                                break;
+                            }
+
+                            reservas.contadorReservas = reservas.CadastrarReserva();
+                            reservas.dataReserva = DateTime.Now.Date.AddDays(reservas.dataExpiracaoReserva);
+
+                            notificador.ApresentarMensagem($"Reserva termina em {reservas.dataReserva}", ConsoleColor.Yellow); 
+                            notificador.ApresentarMensagem($"Reserva cadastrada com sucesso, aperte uma tecla para continuar", ConsoleColor.Green);
+
+
+                            Console.ReadKey();
+                            Console.Clear();
+                            opcaoMenu2 = 0;
+                        }
+                    }
+                    // EMPRESTIMO
+                    while (opcaoMenu2 == 2)
+                    {
+                        #region Verificação
+                        if (revistas.arrayNomeRevista[0] == null)
+                        {
+                            notificador.ApresentarMensagem("\nSem revista cadastrada...", ConsoleColor.Red);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        else if (amigos.arrayNomeCria[0] == null)
+                        {
+                            notificador.ApresentarMensagem("\nSem criança cadastrada...", ConsoleColor.Red);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        #endregion
+
+                        if (revistas.arrayNomeRevista[0] != null && amigos.arrayNomeCria[0] != null)
+                        {
+                            notificador.ApresentarMensagem("\nDigite o nome da revista que você pretende emprestar", ConsoleColor.Yellow);
+                            emprestimos.arrayNomeRevistaEmprestada[indiceEmprestimoMenu] = Console.ReadLine();
+
+                            notificador.ApresentarMensagem("\nDigite o nome da criança para a qual você pretende emprestar", ConsoleColor.Yellow);
+                            emprestimos.arrayNomeCriaEmprestimo[indiceEmprestimoMenu] = Console.ReadLine();
+
+                            if (multas.arrayBoolCriaMultados[indiceEmprestimoMenu] == true)
+                            {
+                                Console.WriteLine("Este amigo está devendo no clube!!! Impossível emprestar...");
+                                Console.ReadKey();
+                                opcaoMenu2 = 5;
+                                break;
+                            }
+
+                            emprestimos.VarrerParaEmprestar(ref opcaoMenu2, revistas.arrayNomeRevista, ref indiceEmprestimoMenu);
+                            notificador.ApresentarMensagem("Emprestimo realizado com sucesso\nAperte uma tecla para continuar", ConsoleColor.Green);
+                            indiceEmprestimoMenu++;
+                            emprestimos.indiceDatas++;
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                    }
+
+                    // DEVOLUÇÃO
+                    if (opcaoMenu2 == 3)
+                    {
+                        Console.WriteLine("\nDigite o nome da revista que você pretende devolver");
+                        string nomeRevistaDevolucao = Console.ReadLine();
+
+                        //Varrer qual quer devolver
+                        contadorDevol = emprestimos.FazerDevolução(revistas, notificador, arrayEstaDevolvido, ref opcaoMenu2, nomeRevistaDevolucao);
+
+                    }
+
+                    // MULTA
+                    if (opcaoMenu2 == 4)
+                    {
+                        Console.WriteLine("\nDigite o nome do amigo que você pretende multar");
+                        string nomeCriaMultar = Console.ReadLine();
+                                                
+
+                        for (int iLoopAmigosMultados = 0; iLoopAmigosMultados < 1000; iLoopAmigosMultados++)
+                        {
+                            if (nomeCriaMultar == amigos.arrayNomeCria[iLoopAmigosMultados])
+                            {
+                                multas.arrayBoolCriaMultados[iLoopAmigosMultados] = true;
+
+                                multas.amigosMultados++;                                
+
+                                Console.WriteLine($"\nPor quantos dias ele ultrapassou o prazo de entrega? (Multa de R$: 0,15/dia) ");
+                                int diasDeMulta = Convert.ToInt32( Console.ReadLine());
+
+                                multas.valorMultas[iLoopAmigosMultados] = diasDeMulta * 0.15;
+
+                                notificador.ApresentarMensagem($"\nValor da multa: {multas.valorMultas[iLoopAmigosMultados]}", ConsoleColor.DarkRed);
+                                Console.ReadKey();
+                                Console.Clear();
+                            }
+                        }
+
+
+                    }
+
+                    //QUITAR MULTA
+                    while (opcaoMenu2 == 5)
+                    {
+                        Console.WriteLine("\nDigite o nome do amigo que terá a multa quitada:");
+                        string amigoQuitarMulta = Console.ReadLine();
+
+                        if (multas.amigosMultados == 0)
+                        {
+                            notificador.ApresentarMensagem($"\nNão existe nenhuma multa atualmente", ConsoleColor.DarkRed);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+
+                        }
+
+                        for (int u = 0; u < 1000; u++)
+                        {
+                            if (amigoQuitarMulta == amigos.arrayNomeCria[u] && multas.arrayBoolCriaMultados[u] == true)
+                            {
+                                multas.arrayBoolCriaMultados[u] = false;
+
+                                multas.amigosMultados--;
+                                                              
+                                multas.valorMultas[u] = 0;
+
+                                notificador.ApresentarMensagem($"\nO valor da multa foi quitado com sucesso!!", ConsoleColor.Green);
+                                Console.ReadKey();
+                                Console.Clear();
+                                opcaoMenu2 = 6;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+
+                    if (opcaoMenu2 == 6)
+                    {
+                        Console.Clear();
+                        break;
+                    }
+
                 }
 
-                //VISUALIZAR Revistas
-                if (opcaoMenu == 7)
+                //VISUALIZACOEEEEEEEEEEEEEEEESSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+                while (opcaoMenuAmplo == 3) 
                 {
-                    Console.WriteLine($"\n\nNúmero total de Revistas: {revistas.contadorRevistas}");
+                    notificador.ApresentarMensagem("CONTROLE DE VISUALIZAÇÕES", ConsoleColor.Cyan);
+                    notificador.ApresentarMensagem("\n1) Visualizar Caixas\n2) Visualizar todas as Revistas\n3) Visualizar Emprestados\n4) Visualizar Multados\n5) Sair", ConsoleColor.White);
+                    opcaoMenu3 = Convert.ToInt32(Console.ReadLine());
 
-                    revistas.MostrarRevistas();
-
-                    notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-
-                //VISUALIZAR EMPRESTADOS
-                if (opcaoMenu == 8)
-                {
-                    Console.WriteLine($"\n\nNúmero de Revistas Emprestadas: {emprestimos.emprestados}");                    
-
-                    emprestimos.MostrarEmprestados(emprestimos.arrayNomeCriaEmprestimo, emprestimos.datasEmprestimoRevista);
-
-                    notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
-                    Console.ReadKey();
-                    Console.Clear();
+                    //VISUALIZAR Caixas
+                    if (opcaoMenu3 == 1)
+                    {
+                        Console.WriteLine($"\n\nNúmero de Caixas: {caixas.contadorCaixas}");
                     
-                }
+                        caixas.MostrarCaixas();
+                    
+                        notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
 
-            } while (opcaoMenu != 9);
+                    //VISUALIZAR Revistas
+                    if (opcaoMenu3 == 2)
+                    {
+                        Console.WriteLine($"\n\nNúmero total de Revistas: {revistas.contadorRevistas}");
+
+                        revistas.MostrarRevistas();
+
+                        notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+
+                    //VISUALIZAR EMPRESTADOS
+                    if (opcaoMenu3 == 3)
+                    {
+                        Console.WriteLine($"\n\nNúmero de Revistas Emprestadas: {emprestimos.emprestados}");                    
+
+                        emprestimos.MostrarEmprestados(emprestimos.arrayNomeCriaEmprestimo, emprestimos.datasEmprestimoRevista);
+
+                        notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();                    
+                    }
+
+                    //VISUALIZAR MULTADOS
+                    if (opcaoMenu3 == 4)
+                    {
+                        Console.WriteLine($"\n\nNúmero de Amigos multados: {multas.amigosMultados}");
+
+                        multas.MostrarMultados( amigos.arrayNomeCria);                        
+
+                        notificador.ApresentarMensagem("Aperte uma tecla para continuar", ConsoleColor.Green);
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+
+                    if (opcaoMenu3 == 5)
+                    {
+                        Console.Clear();
+                        break;
+                    }
+                }              
+            } while (opcaoMenuAmplo != 4);
         }
+
         
 
-#region DEVOLUCAO
-        public static DateTime ObterDataDevolucaoRevista()
-        {
-            DateTime dataDevolucao;
-            bool dataValida;
-            do
-            {
-                Console.Write("Digite a data de Devolucao da Revista: ");
-                dataValida = DateTime.TryParse(Console.ReadLine(), out dataDevolucao);
 
-                if (DataDeDevolucaoExcedeDiaDeHoje(dataDevolucao))
-                {
-                    dataValida = false;
-                    notificador.ApresentarMensagem("Data de empréstimo não pode ser maior que hoje.", ConsoleColor.Red);
-                }
 
-                if (!dataValida)
-                    notificador.ApresentarMensagem("Data inválida. Digite uma data válida no formato 'dd/MM/aaaa'.", ConsoleColor.Red);
 
-            } while (!dataValida);
+        #region DEVOLUCAO
 
-            return dataDevolucao;
-        }
-        private static bool DataDeDevolucaoExcedeDiaDeHoje(DateTime dataDevolucao)
-        {
-            return dataDevolucao > DateTime.Today;
-        }
-        #endregion               
+
+        #endregion
 
     }
 }
